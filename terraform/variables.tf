@@ -27,14 +27,22 @@ variable "network_uuid" {
   default = "9b579624-d844-4df3-b38d-89978b31d37d"
 }
 
+variable "enable_floating_ip" {
+  description = "Floating IP für die VM zuweisen @openstack:floating_ip:enabled"
+  type        = bool
+  # DHBWV6 routet die v6-Fixed-IP bereits öffentlich — keine Floating IP nötig.
+  # Bei einem rein privaten/NAT-Netz ohne öffentliche Route auf true setzen.
+  default = false
+}
+
 variable "floating_ip_pool" {
   description = "Name des External Networks für Floating IPs @openstack:floating_ip_pool:name"
   type        = string
-  default     = "DHBW"
+  default     = "DHBWV6"
 }
 
 variable "shared_secgroup_id" {
   description = "ID der gemeinsamen Security Group für alle VMs @openstack:security_group:id"
   type        = string
-  default     = "4ffaf007-df66-4250-9118-1bd99378d34a"
+  default     = "934851d7-90a2-42ab-927c-fae610697fc7"
 }

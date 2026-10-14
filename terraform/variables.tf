@@ -28,7 +28,7 @@ variable "network_uuid" {
 }
 
 variable "enable_floating_ip" {
-  description = "Floating IP für die VM zuweisen @openstack:floating_ip:enabled"
+  description = "Floating IP für die VM zuweisen"
   type        = bool
   # DHBWV6 routet die v6-Fixed-IP bereits öffentlich — keine Floating IP nötig.
   # Bei einem rein privaten/NAT-Netz ohne öffentliche Route auf true setzen.

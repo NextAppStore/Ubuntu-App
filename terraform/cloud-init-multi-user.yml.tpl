@@ -46,7 +46,7 @@ chpasswd:
   users:
 %{ for idx, user in all_users ~}
     - name: ${user.username}
-      password: ${passwords[idx]}
+      password: "${passwords[idx]}"
       type: text
 %{ endfor ~}
 

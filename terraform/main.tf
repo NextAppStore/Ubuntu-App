@@ -32,10 +32,6 @@ locals {
   flavor   = "gp1.small"
   key_pair = "" # Leer = nur Passwort-Auth
 
-  # Adressen in DHBWv4 sind oeffentlich geroutet, die
-  # feste Adresse der Instanz ist also fuer sich erreichbar.
-  enable_floating_ip = false
-
   metadata = {}
 }
 
@@ -128,20 +124,20 @@ resource "openstack_compute_instance_v2" "shared_vm" {
 # Optional Floating IP (eine für die gemeinsame VM)
 # -----------------------------------------------------------------------------
 resource "openstack_networking_floatingip_v2" "fip" {
-  count = local.enable_floating_ip ? 1 : 0
+  count = var.enable_floating_ip ? 1 : 0
   pool  = data.openstack_networking_network_v2.external.name
 }
 
 # Warten bis VM vollständig gebootet ist
 resource "time_sleep" "wait_for_vm" {
-  count           = local.enable_floating_ip ? 1 : 0
+  count           = var.enable_floating_ip ? 1 : 0
   depends_on      = [openstack_compute_instance_v2.shared_vm]
   create_duration = "60s"
 }
 
 # Port-ID der VM finden
 data "openstack_networking_port_v2" "vm_port" {
-  count     = local.enable_floating_ip ? 1 : 0
+  count     = var.enable_floating_ip ? 1 : 0
   device_id = openstack_compute_instance_v2.shared_vm.id
   depends_on = [
     openstack_compute_instance_v2.shared_vm,
@@ -151,7 +147,7 @@ data "openstack_networking_port_v2" "vm_port" {
 
 # Floating IP Association mit data-basierter Port-ID
 resource "openstack_networking_floatingip_associate_v2" "fip_assoc" {
-  count       = local.enable_floating_ip ? 1 : 0
+  count       = var.enable_floating_ip ? 1 : 0
   floating_ip = openstack_networking_floatingip_v2.fip[0].address
   port_id     = data.openstack_networking_port_v2.vm_port[0].id
 

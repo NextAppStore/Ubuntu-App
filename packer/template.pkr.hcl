@@ -15,12 +15,12 @@ source "openstack" "image" {
   networks          = var.networks
   security_groups   = var.security_groups
   ssh_username      = "ubuntu"
-  # DHBWV6 ist dual-stack; ohne explizite Version waehlt Packer
-  # bevorzugt die IPv4-Adresse. Das VPN der DHBW routet aber nur
-  # IPv6 (2001:7c0:1b20::/48) zum Build-Host, keine Route ins
-  # 10.200.x.x-Netz - daher IPv6 erzwingen, damit lokale Builds
-  # ueber VPN ueberhaupt eine SSH-Verbindung aufbauen koennen.
-  ssh_ip_version = "6"
+  # Packer-Builds laufen vom Worker aus, der selbst innerhalb von
+  # OpenStack sitzt (nicht ueber das DHBW-VPN) - das 10.200.x.x-v4-Netz
+  # ist von dort aus direkt erreichbar. Explizit v4 erzwingen, weil
+  # DHBWV6 dual-stack ist und Packer sonst zufaellig die v6-Adresse
+  # waehlen koennte.
+  ssh_ip_version = "4"
 }
 
 build {

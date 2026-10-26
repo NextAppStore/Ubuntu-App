@@ -1,9 +1,9 @@
 #cloud-config
 
-# SSH mit Passwort-Auth aktivieren
+# Enable SSH with password auth
 ssh_pwauth: true
 
-# Pakete installieren
+# Install packages
 packages:
   - curl
   - wget
@@ -14,13 +14,13 @@ packages:
   - openssl
   - net-tools
 
-# Gruppen für jedes Team erstellen
+# Create a group for each team
 groups:
 %{ for team in unique_teams ~}
   - ${team}
 %{ endfor ~}
 
-# Benutzer erstellen
+# Create users
 users:
 %{ for idx, user in all_users ~}
   - name: ${user.username}
@@ -30,7 +30,7 @@ users:
     lock_passwd: false
 %{ endfor ~}
 
-# SSH-Konfiguration in separate Datei
+# SSH configuration in a separate file
 write_files:
   - path: /etc/ssh/sshd_config.d/99-custom.conf
     content: |
@@ -40,7 +40,7 @@ write_files:
       UsePAM yes
     permissions: '0644'
 
-# Setup-Befehle
+# Setup commands
 chpasswd:
   expire: false
   users:
@@ -57,7 +57,7 @@ runcmd:
   - ufw --force enable
   - ufw allow OpenSSH
   
-  # Setup-Log (OHNE Passwörter aus Sicherheitsgründen)
+  # Setup log (WITHOUT passwords for security reasons)
   - |
     cat >> /var/log/setup-complete.log <<EOF
     ================================================
@@ -68,7 +68,7 @@ runcmd:
     ================================================
     EOF
 
-# Abschlussnachricht
+# Final message
 final_message: |
   ================================================
   Ubuntu Multi-User System bereit!

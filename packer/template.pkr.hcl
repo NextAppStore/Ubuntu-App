@@ -15,11 +15,11 @@ source "openstack" "image" {
   networks          = var.networks
   security_groups   = var.security_groups
   ssh_username      = "ubuntu"
-  # Packer-Builds laufen vom Worker aus, der selbst innerhalb von
-  # OpenStack sitzt (nicht ueber das DHBW-VPN) - das 10.200.x.x-v4-Netz
-  # ist von dort aus direkt erreichbar. Explizit v4 erzwingen, weil
-  # DHBWV6 dual-stack ist und Packer sonst zufaellig die v6-Adresse
-  # waehlen koennte.
+  # Packer builds run from the worker, which itself sits inside
+  # OpenStack (not via the DHBW VPN) - the 10.200.x.x v4 network
+  # is directly reachable from there. Force v4 explicitly, because
+  # DHBWV6 is dual-stack and Packer might otherwise randomly pick the
+  # v6 address.
   ssh_ip_version = "4"
 }
 

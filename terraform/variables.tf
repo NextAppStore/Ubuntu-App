@@ -1,5 +1,5 @@
 ################################################
-# PFLICHT-Variablen
+# REQUIRED variables
 ################################################
 
 variable "users" {
@@ -16,22 +16,22 @@ variable "image_name" {
 }
 
 ################################################
-# Konfigurierbare Variablen
+# Configurable variables
 ################################################
 
 variable "network_uuid" {
   description = "Hauptnetzwerk @openstack:network:id"
   type        = string
-  # DHBWV6: dual-stack (v4+v6 auf demselben Subnetz-Paar) — jede VM
-  # bekommt automatisch beide Fixed-IPs von Neutron.
+  # DHBWV6: dual-stack (v4+v6 on the same subnet pair) — every VM
+  # automatically gets both fixed IPs from Neutron.
   default = "9b579624-d844-4df3-b38d-89978b31d37d"
 }
 
 variable "enable_floating_ip" {
   description = "Floating IP für die VM zuweisen"
   type        = bool
-  # DHBWV6 routet die v6-Fixed-IP bereits öffentlich — keine Floating IP nötig.
-  # Bei einem rein privaten/NAT-Netz ohne öffentliche Route auf true setzen.
+  # DHBWV6 already routes the v6 fixed IP publicly — no floating IP needed.
+  # Set to true on a purely private/NAT network without a public route.
   default = false
 }
 

@@ -2,11 +2,11 @@
 set -euo pipefail
 
 # -----------------------------------------------------------------------------
-# Provisioning Script für Golden Ubuntu 26.04 Image
-# - Basistools + Python + Node.js
-# - Linux-Lernverzeichnis unter /etc/skel/linux-kurs/ (wird in jeden neuen
-#   Home-Ordner kopiert)
-# - Idempotent, reproduzierbar, CI/CD-tauglich
+# Provisioning script for the golden Ubuntu 26.04 image
+# - Base tools + Python + Node.js
+# - Linux learning directory under /etc/skel/linux-kurs/ (copied into every new
+#   home directory)
+# - Idempotent, reproducible, CI/CD-ready
 # -----------------------------------------------------------------------------
 
 NODE_MAJOR=24
@@ -48,16 +48,16 @@ echo "Installiere Node.js..."
 sudo apt-get update
 sudo apt-get install -y --no-install-recommends nodejs
 
-# SSH-Passwort-Authentifizierung vorbereiten (für cloud-init)
-# Drop-in unter sshd_config.d/ — überschreibt nicht die Hauptdatei
+# Prepare SSH password authentication (for cloud-init)
+# Drop-in under sshd_config.d/ — does not overwrite the main file
 echo "Bereite SSH für Passwort-Auth vor..."
 sudo mkdir -p /etc/ssh/sshd_config.d
 printf 'PasswordAuthentication yes\n' \
   | sudo tee /etc/ssh/sshd_config.d/60-password-auth.conf > /dev/null
 
 # =============================================================================
-# Linux-Lernverzeichnis
-# Wird unter /etc/skel/ abgelegt -> automatisch in jeden neuen Home-Ordner
+# Linux learning directory
+# Placed under /etc/skel/ -> automatically copied into every new home directory
 # =============================================================================
 echo "Erstelle Linux-Lernverzeichnis..."
 
@@ -70,7 +70,7 @@ sudo mkdir -p \
   "${KURS_DIR}/uebungen/05-textverarbeitung" \
   "${KURS_DIR}/beispieldaten"
 
-# --- Kurzanleitung (LIES_MICH.txt) ------------------------------------------
+# --- Quick guide (LIES_MICH.txt) --------------------------------------------
 sudo tee "${KURS_DIR}/LIES_MICH.txt" > /dev/null << 'EOF'
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║                    LINUX TERMINAL – KURZANLEITUNG                          ║
@@ -183,7 +183,7 @@ Terminal-Befehle. Starte mit den Aufgaben in den Unterordnern.
 ──────────────────────────────────────────────────────────────────────────────
 EOF
 
-# --- Übung 01: Navigation ----------------------------------------------------
+# --- Exercise 01: Navigation -------------------------------------------------
 sudo tee "${KURS_DIR}/uebungen/01-navigation/aufgaben.txt" > /dev/null << 'EOF'
 ÜBUNG 1 – Navigation im Dateisystem
 ====================================
@@ -211,7 +211,7 @@ Aufgabe 5: Pfade erkunden
   Befehl: ls /etc | head -20
 EOF
 
-# --- Übung 02: Dateien -------------------------------------------------------
+# --- Exercise 02: Files ------------------------------------------------------
 sudo tee "${KURS_DIR}/uebungen/02-dateien/aufgaben.txt" > /dev/null << 'EOF'
 ÜBUNG 2 – Dateien und Verzeichnisse
 =====================================
@@ -243,7 +243,7 @@ Aufgabe 5: Aufräumen
   ACHTUNG: rm löscht unwiderruflich — kein Papierkorb!
 EOF
 
-# --- Übung 03: Berechtigungen ------------------------------------------------
+# --- Exercise 03: Permissions ------------------------------------------------
 sudo tee "${KURS_DIR}/uebungen/03-berechtigungen/aufgaben.txt" > /dev/null << 'EOF'
 ÜBUNG 3 – Berechtigungen
 ==========================
@@ -275,7 +275,7 @@ Aufgabe 4: Bedeutung von rwx
   - Wer darf ausführen?
 EOF
 
-# --- Übung 04: Prozesse ------------------------------------------------------
+# --- Exercise 04: Processes --------------------------------------------------
 sudo tee "${KURS_DIR}/uebungen/04-prozesse/aufgaben.txt" > /dev/null << 'EOF'
 ÜBUNG 4 – Prozesse
 ===================
@@ -301,7 +301,7 @@ Aufgabe 4: Prozess-Info
   Befehl: echo $$
 EOF
 
-# --- Übung 05: Textverarbeitung ----------------------------------------------
+# --- Exercise 05: Text processing --------------------------------------------
 sudo tee "${KURS_DIR}/uebungen/05-textverarbeitung/aufgaben.txt" > /dev/null << 'EOF'
 ÜBUNG 5 – Textverarbeitung und Pipes
 ======================================
@@ -337,7 +337,7 @@ Aufgabe 6 (Bonus): Log-Analyse
   Befehl: journalctl -n 100 | grep -i "error"
 EOF
 
-# --- Beispieldaten -----------------------------------------------------------
+# --- Sample data -------------------------------------------------------------
 sudo tee "${KURS_DIR}/beispieldaten/studenten.csv" > /dev/null << 'EOF'
 name,matrikelnummer,studiengang,semester
 Alice Müller,1234567,Informatik,3
@@ -379,7 +379,7 @@ Probiere zum Beispiel:
   sort -t',' -k4 -n studenten.csv
 EOF
 
-# Lesbar für alle, schreiben nur root
+# Readable for everyone, writable only by root
 sudo chmod -R 755 "${KURS_DIR}"
 sudo chmod 644 \
   "${KURS_DIR}/LIES_MICH.txt" \

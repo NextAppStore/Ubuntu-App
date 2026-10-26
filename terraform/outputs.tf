@@ -5,7 +5,7 @@
 
 output "user_accounts" {
   description = "[CONTRACT] User accounts mit Login-Informationen"
-  sensitive   = true # Enthält Passwörter
+  sensitive   = true # Contains passwords
   value = length(local.all_users) > 0 ? {
     for i in range(length(local.all_users)) : local.user_ids[i] => {
       type     = "password"
